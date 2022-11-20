@@ -1,2 +1,7 @@
 # The-use-of-ROS-in-controlling-the-process-of-laser-soldering-on-circuit-board
+
 this is a repository for a project that aims to research to use os ROS on a industrial environment.
+
+The laser soldering of circuit boards is a very delicate and repetitive process, which demands great precision, with small imperfections the process ends up having several recurring defects, so the use of human quality control is always very necessary. However, the use of trained labor is unfeasible since such machines are capable of producing dozens of plates per hour, since they work with pre-programmed routines. That being said, the need arises for a machine capable of executing all the steps of the production cycle by itself, with a high level of reliability and, if possible, low maintenance.
+An alternative addressed in this study is the use of ROS (Robot Operating System), which is a set of frameworks that work as a pseudo–operating system that can run several programs in parallel depending on their priority and facilitate communication between the different programs that control the machine, enabling the use of more complex control systems in a relatively low-cost architecture. For this, a robotic arm controlled by ROS was built, capable of performing all the necessary movements to perform the welding process in a basic way and which aims to test the technology and develop the necessary knowledge for an eventual implementation in the industry.
+
