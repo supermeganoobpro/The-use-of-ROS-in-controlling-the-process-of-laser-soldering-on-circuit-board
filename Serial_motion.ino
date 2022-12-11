@@ -1,10 +1,10 @@
 #include <SpeedyStepper.h>
-/*
-#include <ros.h>     
-#include <std_msgs/Empty.h> //http://wiki.ros.org/rosserial_arduino/Tutorials/Arduino%20IDE%20Setup
+
+#include <ros.h>        //rosrun rosserial_arduino serial_node.py _port:=/dev/ttyUSB0
+#include <std_msgs/String.h> //http://wiki.ros.org/rosserial_arduino/Tutorials/Arduino%20IDE%20Setup
 
 ros::NodeHandle  nh;
-*/
+
 #define X_STEP_PIN         54
 #define X_DIR_PIN          55
 #define X_ENABLE_PIN       38
@@ -33,8 +33,9 @@ ros::NodeHandle  nh;
 
 SpeedyStepper stepperX;
 SpeedyStepper stepperZ;
+
 String numb2 ;
- String numb1;
+String numb1;
 String x;
 
 void stepmove(){
@@ -42,23 +43,29 @@ void stepmove(){
   int stepy = numb2.toInt();
   stepperX.setSpeedInStepsPerSecond(100);
   stepperX.setAccelerationInStepsPerSecondPerSecond(80);
-  stepperX.setupRelativeMoveInSteps(stepx);
+  stepperX.moveRelativeInSteps(stepx);
 
   stepperZ.setSpeedInStepsPerSecond(100);
   stepperZ.setAccelerationInStepsPerSecondPerSecond(80);
-  stepperZ.setupRelativeMoveInSteps(-stepy);
-
-  while((!stepperX.motionComplete()) || (!stepperZ.motionComplete()))
-  {
-    stepperX.processMovement();
-    stepperZ.processMovement();
-  }
+  stepperZ.moveRelativeInSteps(stepy);
 
 }
-void setup() {
- Serial.begin(115200);
- Serial.setTimeout(1);
+
+void messageCb(std_msgs::String& toggle){
+    x = toggle.data;
+    int Fvirg = x.indexOf(',');
+    int svirg = x.indexOf('}');
+    numb2 = x.substring(Fvirg+2, svirg);
+    numb1 = x.substring(1,Fvirg);
+    //Serial.print(numb2);
+    stepmove();
  
+}
+
+ros::Subscriber<std_msgs:: String> sub("arduino", &messageCb );
+
+void setup() {
+  Serial.begin(57600);
   pinMode(X_STEP_PIN  , OUTPUT);
   pinMode(X_DIR_PIN    , OUTPUT);
   pinMode(X_ENABLE_PIN    , OUTPUT);
@@ -77,14 +84,11 @@ void setup() {
  
   stepperX.connectToPins(X_STEP_PIN, X_DIR_PIN);
   stepperZ.connectToPins(Z_STEP_PIN, Z_DIR_PIN);
+
+  nh.initNode();
+  nh.subscribe(sub);
 }
 void loop() {
- while (!Serial.available());
- x = Serial.readString();
- int Fvirg = x.indexOf(',');
- int svirg = x.indexOf('}');
-  numb2 = x.substring(Fvirg, svirg);
-  numb1 = x.substring(1,Fvirg);
- stepmove();
- Serial.print(numb1+","+numb2);
+  nh.spinOnce();
+  delay(1);
 }
