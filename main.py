@@ -1,5 +1,6 @@
 #!/usr/bin/env python
  
+# version 1.2 - improved kinematics / to do: implemente speed dependent moves
 import rospy
 from std_msgs.msg import String
 from tkinter import *
@@ -83,14 +84,14 @@ def ajustefunxp():   #resolver a questão da cinematica nova
     if x0 == 0:
         mi = 90
     else:
-        mi = float(math.atan(y0 / x0))
+        mi = float(math.atan(x0 / y0))
 
 
-    lx = x0 * (1 / (math.degrees(math.sin(mi))))
+    lx = y0 / (1 / (math.degrees(math.sin(mi))))
     l = lx + 15  # buffer de distancia da base
     a = math.sqrt((z0 ** 2) + (l ** 2))
     alfa = math.degrees(math.atan(z / l))
-    beta = math.degrees(math.acos(((a ** 2) + (q ** 2) - (c ** 2)) / (2 * a * q)))
+    beta = math.degrees(math.acos(((a ** 2) + (c ** 2) - (q ** 2)) / (2 * a * c)))
 
     teta = alfa + beta
     phi = 0
@@ -120,13 +121,14 @@ def ajustefunxm():
     if x0 == 0:
         mi = 90
     else:
-        mi = float(math.atan(y0 / x0))
+        mi = float(math.atan(x0 / y0))
 
-    lx = x0 * (1 / (math.degrees(math.sin(mi))))
+
+    lx = y0 / (1 / (math.degrees(math.sin(mi))))
     l = lx + 15  # buffer de distancia da base
     a = math.sqrt((z0 ** 2) + (l ** 2))
     alfa = math.degrees(math.atan(z / l))
-    beta = math.degrees(math.acos(((a ** 2) + (q ** 2) - (c ** 2)) / (2 * a * q)))
+    beta = math.degrees(math.acos(((a ** 2) + (c ** 2) - (q ** 2)) / (2 * a * c)))
 
     teta = alfa + beta
     phi = 0
@@ -154,13 +156,14 @@ def ajustefunyp():
     if x0 == 0:
         mi = 90
     else:
-        mi = float(math.atan(y0 / x0))
+        mi = float(math.atan(x0 / y0))
 
-    lx = x0 * (1 / (math.degrees(math.sin(mi))))
+
+    lx = y0 / (1 / (math.degrees(math.sin(mi))))
     l = lx + 15  # buffer de distancia da base
     a = math.sqrt((z0 ** 2) + (l ** 2))
     alfa = math.degrees(math.atan(z / l))
-    beta = math.degrees(math.acos(((a ** 2) + (q ** 2) - (c ** 2)) / (2 * a * q)))
+    beta = math.degrees(math.acos(((a ** 2) + (c ** 2) - (q ** 2)) / (2 * a * c)))
 
     teta = alfa + beta
     phi = 0
@@ -189,13 +192,14 @@ def ajustefunym():
     if x0 == 0:
         mi = 90
     else:
-        mi = float(math.atan(y0 / x0))
+        mi = float(math.atan(x0 / y0))
 
-    lx = x0 * (1 / (math.degrees(math.sin(mi))))
+
+    lx = y0 / (1 / (math.degrees(math.sin(mi))))
     l = lx + 15  # buffer de distancia da base
     a = math.sqrt((z0 ** 2) + (l ** 2))
     alfa = math.degrees(math.atan(z / l))
-    beta = math.degrees(math.acos(((a ** 2) + (q ** 2) - (c ** 2)) / (2 * a * q)))
+    beta = math.degrees(math.acos(((a ** 2) + (c ** 2) - (q ** 2)) / (2 * a * c)))
 
     teta = alfa + beta
     phi = 0
@@ -223,13 +227,14 @@ def ajustefunzp():
     if x0 == 0:
         mi = 90
     else:
-        mi = float(math.atan(y0 / x0))
+        mi = float(math.atan(x0 / y0))
 
-    lx = x0 * (1 / (math.degrees(math.sin(mi))))
+
+    lx = y0 / (1 / (math.degrees(math.sin(mi))))
     l = lx + 15  # buffer de distancia da base
     a = math.sqrt((z0 ** 2) + (l ** 2))
     alfa = math.degrees(math.atan(z / l))
-    beta = math.degrees(math.acos(((a ** 2) + (q ** 2) - (c ** 2)) / (2 * a * q)))
+    beta = math.degrees(math.acos(((a ** 2) + (c ** 2) - (q ** 2)) / (2 * a * c)))
 
     teta = alfa + beta
     phi = 0
@@ -258,13 +263,14 @@ def ajustefunzm():
     if x0 == 0:
         mi = 90
     else:
-        mi = float(math.atan(y0 / x0))
+        mi = float(math.atan(x0 / y0))
 
-    lx = x0 * (1 / (math.degrees(math.sin(mi))))
+
+    lx = y0 / (1 / (math.degrees(math.sin(mi))))
     l = lx + 15  # buffer de distancia da base
     a = math.sqrt((z0 ** 2) + (l ** 2))
     alfa = math.degrees(math.atan(z / l))
-    beta = math.degrees(math.acos(((a ** 2) + (q ** 2) - (c ** 2)) / (2 * a * q)))
+    beta = math.degrees(math.acos(((a ** 2) + (c ** 2) - (q ** 2)) / (2 * a * c)))
 
     teta = alfa + beta
     phi = 0
@@ -473,33 +479,13 @@ def ok():
                 deltax = abs(float(x - x0))
                 promptprint('deltas')
                 promptprint(deltax)
-                if deltax != 0:
-                    flagx = 1
-                    fx = float(deltax * f / 1000)
-                    kx = int(deltax / fx)
 
                 deltay = abs(float(y - y0))
                 promptprint(deltay)
-                if deltay != 0:
-                    flagy = 1
-                    fy = float(deltay * f / 1000)
-                    ky = int(deltay / fy)
 
                 deltaz = abs(float(z - z0))
                 promptprint(deltaz)
-                if deltaz != 0:
-                    flagz = 1
-                    fz = float(deltaz * f / 1000)
-                    kz = int(deltaz / fz)
 
-                if kx != 0:
-                    kv = kx
-
-                if ky != 0:
-                    kv = ky
-
-                if kz != 0:
-                    kv = kz
 
                     # G0
                 if g == 0:
@@ -509,71 +495,57 @@ def ok():
                     else:
                         mi = float(math.atan(y / x))
 
-                    lx = x * (1 / (math.degrees(math.sin(mi))))
-                    l = lx + 15 #buffer de distancia da base
-                    a = math.sqrt((z ** 2) + (l ** 2))
-                    alfa = math.degrees(math.atan(z / l))
-                    #print(l,a,q,c,alfa,x,y,z)
-                    beta = math.degrees(math.acos(((a ** 2) + (q ** 2) - (c ** 2)) / (2 * a * q)))
+                    lx = deltax / (1/(math.degrees(math.sin(mi))))
+                    l = lx + 15  # buffer de distancia da base
+
+                    a = math.sqrt((deltaz ** 2) + (l ** 2))
+                    alfa = math.degrees(math.atan(deltaz / l))
+                    beta = math.degrees(math.acos(((a ** 2) + (c ** 2) - (q ** 2)) / (2 * a * c)))
 
                     teta = alfa + beta
                     phi = 85
 
-                    dM = float(mi - mi0) / 1.8
-                    dP = float(phi - phi0) / 1.8
-                    dT = float(teta - teta0) / 1.8
-                    mi0 = float(mi)
-                    phi0 = float(phi)
-                    teta0 = float(teta)
+                    dM = float(mi) / 1.8
+                    dP = float(phi) / 1.8
+                    dT = float(teta) / 1.8
+
                     data = {dM,dT}
                     promptprint('angleS')
                     promptprint(dP)
                     promptprint(dT)
                     promptprint(dM)
-                    promptprint(data)
-                    rostalk(data) 
+                    promptprint(' ')
+                    rostalk(data)  
                      
 
                 # G1
                 if g == 1:
                     promptprint('g1')
-                    for cont in range(1, kv + 1, 1):
-                        if flagx == 1:
-                            x0 = x0 + fx
+                    if x0 == 0 or x == 0:
+                        mi = 90
+                    else:
+                        mi = float(math.atan(deltax / deltay))
 
-                        if flagy == 1:
-                            y0 = y0 + fy
+                    lx = deltax / (1/(math.degrees(math.sin(mi))))
+                    l = lx + 15  # buffer de distancia da base
 
-                        if flagz == 1:
-                            z0 = z0 + fz
+                    a = math.sqrt((deltaz ** 2) + (l ** 2))
+                    alfa = math.degrees(math.atan(deltaz / l))
+                    beta = math.degrees(math.acos(((a ** 2) + (c ** 2) - (q ** 2)) / (2 * a * c)))
 
-                        if x0 == 0 or x == 0:
-                            mi = 90
-                        else:
-                            mi = float(math.atan(y / x))
+                    teta = alfa + beta
+                    phi = 85
+                    dM = float(mi) / 1.8
+                    dP = float(phi) / 1.8
+                    dT = float(teta) / 1.8
 
-                        lx = x * (1 / (math.degrees(math.sin(mi))))
-                        l = lx + 15  # buffer de distancia da base
-
-                        a = math.sqrt((z ** 2) + (l ** 2))
-                        alfa = math.degrees(math.atan(z / l))
-                        beta = math.degrees(math.acos(((a ** 2) + (q ** 2) - (c ** 2)) / (2 * a * q)))
-
-                        teta = alfa + beta
-                        phi = 85
-                        dM = float(mi - mi0) / 1.8
-                        dP = float(phi - phi0) / 1.8
-                        dT = float(teta - teta0) / 1.8
-                        mi0 = float(mi)
-                        phi0 = float(phi)
-                        teta0 = float(teta)
-                        data = {dM,dT}
-                        promptprint('angleS')
-                        promptprint(dP)
-                        promptprint(dT)
-                        promptprint(dM)
-                        promptprint(' ')
-                        rostalk(data) 
+                    data = {dM,dT}
+                    promptprint('angleS')
+                    promptprint(dP)
+                    promptprint(dT)
+                    promptprint(dM)
+                    promptprint(' ')
+                    rostalk(data) 
 
                     x0 = x
                     y0 = y
